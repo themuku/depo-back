@@ -50,17 +50,20 @@ router.post("/products/add-many", async (req, res) => {
 router.get("/products/:id", async (req, res) => {
   const { id } = req.params;
 
-  const product = await prisma.product.findUnique({
-    where: {
-      id: parseInt(id),
-    },
-  });
+  try {
+    const product = await prisma.product.findUnique({
+      where: {
+        id,
+      },
+    });
 
-  if (!product) {
-    return res.status(404).json({ error: "Product not found" });
+    if (!product) {
+      return res.status(404).json({ error: "Bu id ile mehsul movcud deil!" });
+    }
+    return res.json(product);
+  } catch (error) {
+    return res.status(500).json({ error: "Error fetching product" });
   }
-
-  return res.json(product);
 });
 
 export default router;
