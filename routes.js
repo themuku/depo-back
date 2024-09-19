@@ -66,4 +66,28 @@ router.get("/products/:id", async (req, res) => {
   }
 });
 
+router.patch("/products/buy-one/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const product = await prisma.product.update({
+      where: {
+        id,
+      },
+      data: {
+        stock: {
+          decrement: 1,
+        },
+      },
+    });
+
+    if (!product) {
+      return res.status(404).json({ error: "Bu id ile mehsul movcud deil!" });
+    }
+    return res.json(product);
+  } catch (error) {
+    return res.status(500).json({ error: "Error buying product" });
+  }
+});
+
 export default router;
