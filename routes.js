@@ -20,10 +20,23 @@ router.get("/products", async (req, res) => {
 });
 
 router.post("/products/add-one", async (req, res) => {
-  const prodBody = req.body;
+  const data = req.body;
+
+  if (
+    !data.productName ||
+    !data.price ||
+    !data.stockAmount ||
+    !data.description
+  ) {
+    return res
+      .status(400)
+      .json({
+        error: "Please provide product name, price, stock and description",
+      });
+  }
 
   const product = await prisma.product.create({
-    data: prodBody,
+    data,
   });
 
   if (!product) {
