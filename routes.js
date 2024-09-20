@@ -9,7 +9,7 @@ router.get("/", (req, res) => {
   return res.send("Salam, world!");
 });
 
-router.get("/", async (req, res) => {
+router.get("/all", async (req, res) => {
   const products = await prisma.product.findMany();
 
   if (products.length === 0) {
