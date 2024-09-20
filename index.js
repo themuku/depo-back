@@ -13,7 +13,7 @@ app.use(cors());
 
 const prisma = new PrismaClient();
 
-app.use(router);
+app.use("/get", router);
 
 app.listen("3000", () => {
   console.log("Server is running on port 3000");

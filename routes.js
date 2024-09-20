@@ -9,7 +9,7 @@ router.get("/", (req, res) => {
   return res.send("Salam, world!");
 });
 
-router.get("/products", async (req, res) => {
+router.get("/", async (req, res) => {
   const products = await prisma.product.findMany();
 
   if (products.length === 0) {
@@ -19,7 +19,7 @@ router.get("/products", async (req, res) => {
   return res.json(products);
 });
 
-router.post("/products/add-one", async (req, res) => {
+router.post("/add-one", async (req, res) => {
   const data = req.body;
 
   if (
@@ -28,11 +28,9 @@ router.post("/products/add-one", async (req, res) => {
     !data.stockAmount ||
     !data.description
   ) {
-    return res
-      .status(400)
-      .json({
-        error: "Please provide product name, price, stock and description",
-      });
+    return res.status(400).json({
+      error: "Please provide product name, price, stock and description",
+    });
   }
 
   const product = await prisma.product.create({
@@ -46,7 +44,7 @@ router.post("/products/add-one", async (req, res) => {
   return res.json(product);
 });
 
-router.post("/products/add-many", async (req, res) => {
+router.post("/add-many", async (req, res) => {
   const { data } = req.body;
 
   const createdProducts = await prisma.product.createMany({
@@ -60,7 +58,7 @@ router.post("/products/add-many", async (req, res) => {
   return res.json(createdProducts);
 });
 
-router.get("/products/:id", async (req, res) => {
+router.get("/:id", async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -79,7 +77,7 @@ router.get("/products/:id", async (req, res) => {
   }
 });
 
-router.patch("/products/buy-one/:id", async (req, res) => {
+router.patch("/buy-one/:id", async (req, res) => {
   const { id } = req.params;
 
   try {
