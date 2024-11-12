@@ -101,4 +101,33 @@ router.patch("/buy-one/:id", async (req, res) => {
   }
 });
 
+router.post("/add-user", async (req, res) => {
+  try {
+    const { data } = req.body;
+
+    const existingUser = await prisma.user.findFirst({
+      where: {
+        email: data.email,
+      },
+    });
+
+    if (existingUser)
+      return res
+        .status(409)
+        .json({ message: "User with this email is already existing" });
+
+    const user = await prisma.user.create({
+      data,
+    });
+
+    console.log(user);
+
+    res.cookie("token", user, { httpOnly: true });
+
+    return res.status(201).json({ data: user });
+  } catch (error) {
+    return res.status(500).json({ message: "Something went wrong!" });
+  }
+});
+
 export default router;
